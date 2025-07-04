@@ -1,12 +1,13 @@
 import pandas as pd
 import re
+import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, GlobalAveragePooling1D, Dense
 from tensorflow.keras.callbacks import EarlyStopping
-import matplotlib.pyplot as plt
 from tensorflow.keras.layers import LSTM
+from sklearn.metrics import recall_score, f1_score, classification_report
 
 # Carregar o dataset
 df = pd.read_csv('train.csv')
@@ -54,5 +55,18 @@ history = model.fit(X, y, epochs=10, batch_size=512, validation_split=0.2, callb
 # Avaliar o modelo
 loss, acc = model.evaluate(X, y)
 print(f"Desempenho no teste — Loss: {loss:.4f}, Acurácia: {acc:.4f}")
+
+# Obter probabilidades previstas
+y_pred_prob = model.predict(X, verbose=0)
+
+# Converter em classes (0 ou 1)
+y_pred = (y_pred_prob >= 0.5).astype(int).reshape(-1)
+
+# Calcular recall e F1‑score
+recall = recall_score(y, y_pred)
+f1    = f1_score(y, y_pred)
+
+print(f"Recall: {recall:.4f}")
+print(f"F1‑score: {f1:.4f}\n")
 
 model.save('game_sentiment_model.keras')

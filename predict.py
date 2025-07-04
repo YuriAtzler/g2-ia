@@ -8,8 +8,6 @@ from tensorflow.keras.models import load_model
 model = load_model('game_sentiment_model.keras')
 
 # carrega novamente o tokenizador treinado
-# OBS: o tokenizador original precisa ser salvo; se não salvou, terá que refazer o fit no mesmo corpus
-# para este exemplo, vamos refazer:
 df = pd.read_csv('train.csv')
 
 def clean_text(text):
@@ -34,5 +32,10 @@ def predict_review(review_text):
     print(f"Classificação: {sentiment}\n")
 
 # exemplos de teste
-predict_review("I didn't like the controls, too clunky")
-predict_review("The multiplayer mode is fantastic, very engaging")
+predict_review("great job breaking everything again")
+predict_review("the gameplay is fun but the story sucks")
+predict_review("the graphics are awesome")
+predict_review("bad graphics")
+predict_review("I love this game")
+predict_review("this game is terrible")
+predict_review("the game is too easy")
