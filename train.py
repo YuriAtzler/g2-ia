@@ -11,15 +11,17 @@ from tensorflow.keras.layers import LSTM
 # Carregar o dataset
 df = pd.read_csv('train.csv')
 
+# Função para limpar o texto
+# Remove texto HTML e caracteres especiais, e converte para minúsculas
 def clean_text(text):
-    text = re.sub(r'<.*?>', '', text)  # Remover tags HTML
-    text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remover caracteres não alfabéticos
+    text = re.sub(r'<.*?>', '', text)
+    text = re.sub(r'[^a-zA-Z\s]', '', text) 
     return text.lower().strip()
 
 # Aplicar a função de limpeza
 df['cleaned_review'] = df['user_review'].apply(clean_text)
 
-# Inicializar o tokenizador
+# Criar tokens, limite o vocabulário a 10.000 palavras
 tokenizer = Tokenizer(num_words=10000)
 tokenizer.fit_on_texts(df['cleaned_review'])
 
